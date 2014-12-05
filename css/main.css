@@ -1,0 +1,55 @@
+:not(button) {
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    font: 500 13px "helvetica neue", helvetica, arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-align: center;
+    color: #5D6D81;
+    padding-top: 150px;
+}
+
+a {
+    color: #040810;
+    color: #1394BF;
+    text-decoration: none;
+}
+
+form {
+    display: inline-block;
+    padding: 5px 7px 5px 8px;
+    border: 1px solid #E9EBED;
+    border-radius: 5px;
+}
+
+input {
+    width: 152px;
+    padding: 0.33em;
+    border: 1px solid #E9EBED;
+    -webkit-font-smoothing: antialiased;
+}
+
+input:focus {
+    outline: none;
+}
+
+::-webkit-input-placeholder {
+    color: #AFB9BF;
+}
+
+::-moz-placeholder {
+    color: #AFB9BF;
+}
+
+:-ms-input-placeholder {
+    color: #AFB9BF;
+}
+
+#book_list {
+    width: 225px;
+    margin: 1em auto;
+    text-align: left;
+    list-style: none;
+}

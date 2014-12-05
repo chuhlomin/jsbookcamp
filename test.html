@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf=8">
+    <title>Tests</title>
+    <link rel="stylesheet" href="/bower_components/jasmine/lib/jasmine-core/jasmine.css">
+</head>
+<body>
+<script src="/bower_components/jasmine/lib/jasmine-core/jasmine.js"></script>
+<script src="/bower_components/jasmine/lib/jasmine-core/jasmine-html.js"></script>
+<script src="/bower_components/jasmine/lib/jasmine-core/boot.js"></script>
+<script src="/bower_components/requirejs/require.js"></script>
+
+<script>
+    require.config({
+        baseUrl: '/js'
+    });
+
+    require(['BookStore'], function (BookStore) {
+        describe("Book Store Tests / ", function () {
+            describe("Add /", function () {
+                it("should add one book", function () {
+                    var bookStore = new BookStore();
+                    var book = {name: 'Pride and Prejudice'};
+                    var result = bookStore.add(book);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(1);
+                    expect(result[0].id).toBeDefined();
+                    expect(result[0].id).toBe(1);
+                    expect(book.id).toBeDefined();
+                    expect(book.id).toBe(1);
+                    expect(bookStore.all().length).toBe(1);
+                });
+
+                it("should add two books, one by one", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1);
+                    bookStore.add(book2);
+
+                    expect(book2.id).toBeDefined();
+                    expect(book2.id).toBe(2);
+                    expect(bookStore.all().length).toBe(2);
+                });
+
+                it("should add two books at once", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    var result = bookStore.add(book1, book2);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(2);
+                    expect(result[0].id).toBeDefined();
+                    expect(result[0].id).toBe(1);
+                    expect(result[1].id).toBeDefined();
+                    expect(result[1].id).toBe(2);
+                    expect(bookStore.all().length).toBe(2);
+                });
+
+                it("should add only unique books", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    var book3 = {name: 'Treasure Island'};
+                    bookStore.add(book1, book2);
+                    var result = bookStore.add(book3, book1);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(1);
+                    expect(result[0].name).toBeDefined();
+                    expect(result[0].name).toBe('Treasure Island');
+                    expect(bookStore.all().length).toBe(3);
+                });
+
+                it("should ignore number while adding", function () {
+                    var bookStore = new BookStore();
+                    var result = bookStore.add(1);
+
+                    expect(Array.isArray(result)).toBe(false);
+                    expect(result).toBe(0);
+                    expect(bookStore.all().length).toBe(0);
+                });
+
+                it("should ignore strings while adding", function () {
+                    var bookStore = new BookStore();
+                    var result = bookStore.add('string');
+
+                    expect(Array.isArray(result)).toBe(false);
+                    expect(result).toBe(0);
+                    expect(bookStore.all().length).toBe(0);
+                });
+
+                it("should add book recursively", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities' };
+                    var book3 = {name: 'Treasure Island'};
+                    var book4 = {name: 'Dracula'};
+                    var book5 = {name: 'Dracula 2'};
+
+                    var result = bookStore.add(book1, [book2, book3, [book4]], book5);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(5);
+                    expect(bookStore.all().length).toBe(5);
+                });
+
+                it("should add book async", function (done) {
+                    var bookStore = new BookStore();
+                    bookStore.addAsync({title: 'ABC'}, function (err, book) {
+                        expect(book.title).toBe('ABC');
+                        done();
+                    });
+                });
+            });
+
+            describe("Remove /", function () {
+
+                it("should remove one book from the store", function () {
+                    var bookStore = new BookStore();
+                    var book = {name: 'Pride and Prejudice'};
+                    bookStore.add(book);
+
+                    var result = bookStore.remove(book);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(1);
+                    expect(bookStore.all().length).toBe(0);
+                });
+
+                it("should remove two or more books from the store", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    var book3 = {name: 'Treasure Island'};
+                    bookStore.add(book1, book2, book3);
+
+                    var result = bookStore.remove(book2, book3);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(2);
+                    expect(result[0].name).toBe('A Tale of Two Cities');
+                    expect(result[1].name).toBe('Treasure Island');
+
+                    expect(bookStore.all().length).toBe(1);
+                });
+
+                it("should remove book by id", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.remove(book1, book2.id);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(2);
+
+                    expect(bookStore.all().length).toBe(0);
+                });
+
+                it("should not remove book by name", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.remove(book1, 'A Tale of Two Cities');
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(1);
+                    expect(result[0].name).toBe('Pride and Prejudice');
+
+                    expect(bookStore.all().length).toBe(1);
+                });
+            });
+
+            describe("Find /", function () {
+                it("should find book by id", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.find(2);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(1);
+                    expect(result[0].name).toBe('A Tale of Two Cities');
+                });
+
+                it("should return emty array if search query is empty", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.find();
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(0);
+                });
+
+                it("should search by part of name", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.find('Pride');
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(1);
+                    expect(result[0].name).toBe('Pride and Prejudice');
+                });
+            });
+
+            describe("All /", function () {
+                it("should return all stored books", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.all();
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(2);
+                    expect(result[0].name).toBe('Pride and Prejudice');
+                    expect(result[0].id).toBe(1);
+                    expect(result[1].name).toBe('A Tale of Two Cities');
+                    expect(result[1].id).toBe(2);
+                });
+            });
+
+            describe("Print /", function () {
+                xit("should print all books in store", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    bookStore.print();
+                    // don't how to assert console output
+                });
+            });
+        });
+
+        window.onload();
+    });
+</script>
+</body>
+</html>

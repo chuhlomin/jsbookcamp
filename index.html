@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Book Store</title>
+    <script src="/bower_components/requirejs/require.js" data-main="js/main"></script>
+    <link rel="stylesheet" href="/css/main.css">
+</head>
+<body>
+
+<form id="add_book">
+    <input placeholder="Title"/>
+    <button type="submit">ADD</button>
+</form>
+
+<ul id="book_list"></ul>
+
+<script type="text/template" id="book_template">
+    <button class="remove">&times;</button> <span>{{name}}</span>
+</script>
+</body>
+</html>
