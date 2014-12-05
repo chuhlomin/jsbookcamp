@@ -8,24 +8,19 @@
     -webkit-font-smoothing: antialiased;
     text-align: center;
     color: #5D6D81;
-    padding-top: 150px;
 }
 
 a {
-    color: #040810;
     color: #1394BF;
     text-decoration: none;
 }
 
 form {
     display: inline-block;
-    padding: 5px 7px 5px 8px;
-    border: 1px solid #E9EBED;
-    border-radius: 5px;
 }
 
 input {
-    width: 152px;
+    width: 170px;
     padding: 0.33em;
     border: 1px solid #E9EBED;
     -webkit-font-smoothing: antialiased;
@@ -33,6 +28,24 @@ input {
 
 input:focus {
     outline: none;
+}
+
+button {
+    padding: 0.2em 0.66em;
+    background: white;
+    box-shadow: 0 1px 1px #eee;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    border-top-color: #e5e5e5;
+    border-bottom-color: #ccc;
+}
+
+button:active {
+    border: 1px solid #178AFA;
+    border-top-color: #26A8FC;
+    border-bottom-color: #1971FB;
+    color: white;
+    background: linear-gradient(to bottom, #2CB6F5 0%, #1789FC 100%);
 }
 
 ::-webkit-input-placeholder {
@@ -47,9 +60,19 @@ input:focus {
     color: #AFB9BF;
 }
 
+.form-line {
+    background: #fafafd;
+    padding: 0.66em 0;
+    border-bottom: 1px solid #E9EBED;
+}
+
 #book_list {
     width: 225px;
     margin: 1em auto;
     text-align: left;
     list-style: none;
+}
+
+#book_list .book + .book {
+    margin-top: 0.33em;
 }

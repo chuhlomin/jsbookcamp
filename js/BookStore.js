@@ -25,7 +25,15 @@ define(['EventEmitter'], function (EventEmitter) {
             return false;
         }
 
-        return book.name !== undefined;
+        if (book.name === undefined) {
+            return false;
+        }
+
+        if (book.name.length === 0) {
+            return false;
+        }
+
+        return true;
     };
 
     _p._getBookIndexByName = function (name, partial) {
@@ -93,7 +101,7 @@ define(['EventEmitter'], function (EventEmitter) {
                         continue;
                     }
 
-                    book_temp = result_temp[0]
+                    book_temp = result_temp[0];
                     if (this._isValidBookObject(book_temp)) {
                         result.push(book_temp);
                     }
@@ -216,6 +224,17 @@ define(['EventEmitter'], function (EventEmitter) {
                 }
             }
         }
+    };
+
+    _p.getBook = function (id) {
+        var book_index = this._getBookIndexById(id);
+
+        if (book_index === false) {
+            return 0;
+        }
+
+        book_index--;
+        return this._items[book_index];
     };
 
     return BookStore;

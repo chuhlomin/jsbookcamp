@@ -5,15 +5,18 @@ require(['BookStore', 'AppController'], function (BookStore, AppController) {
 
     form.addEventListener('submit', function (e) {
         var input = form.querySelector('input');
-        var title = input.value;
+        var title = input.value.trim();
         input.value = '';
 
-        bookStore.add({
+        var result = bookStore.add({
             name: title
         });
 
         e.preventDefault();
-        console.log(title, 'added');
+
+        if (result !== 0) {
+            console.log(title, 'added');
+        }
     });
 
     new AppController(document.getElementById('book_list'), bookStore);

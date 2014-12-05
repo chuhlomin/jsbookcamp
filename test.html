@@ -108,10 +108,20 @@
                     expect(bookStore.all().length).toBe(5);
                 });
 
+                it("should not add book with empty title", function () {
+                    var bookStore = new BookStore();
+                    var book = {name: ''};
+                    var result = bookStore.add(book);
+
+                    expect(Array.isArray(result)).toBe(false);
+                    expect(result).toBe(0);
+                    expect(bookStore.all().length).toBe(0);
+                });
+
                 it("should add book async", function (done) {
                     var bookStore = new BookStore();
-                    bookStore.addAsync({title: 'ABC'}, function (err, book) {
-                        expect(book.title).toBe('ABC');
+                    bookStore.addAsync({name: 'ABC'}, function (err, book) {
+                        expect(book.name).toBe('ABC');
                         done();
                     });
                 });
@@ -245,6 +255,22 @@
 
                     bookStore.print();
                     // don't how to assert console output
+                });
+            });
+
+            describe("Get /", function () {
+                it("should get book by id", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+                    bookStore.print();
+
+                    var result = bookStore.getBook(1);
+
+                    expect(typeof result).toBe('object');
+                    expect(result.id).toBe(1);
+                    expect(result.name).toBe('Pride and Prejudice');
                 });
             });
         });
