@@ -19,6 +19,7 @@ require(['BookStore', 'AppController'], function (BookStore, AppController) {
 
         if (result !== 0) {
             input.value = '';
+            input.focus();
             console.log(title, 'added');
         }
 
