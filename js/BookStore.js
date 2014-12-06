@@ -237,6 +237,32 @@ define(['EventEmitter'], function (EventEmitter) {
         return this._items[book_index];
     };
 
+    _p.update = function (id, name) {
+
+        if (name.trim() === '') {
+            return 'Book name can not be empty.';
+        }
+
+        var bookWithSameName = this._getBookIndexByName(name, false);
+
+        if (bookWithSameName !== false && this._items[bookWithSameName - 1].id !== id) {
+            return 'Book name should be unique.';
+        }
+
+        var book_index = this._getBookIndexById(id);
+
+        if (book_index === false) {
+            return 'Book not found by ID ' + id + '.';
+        }
+
+        book_index--;
+        var book = this._items[book_index];
+        book.name = name;
+        this.emit('book_updated', book);
+
+        return '';
+    };
+
     return BookStore;
 });
 

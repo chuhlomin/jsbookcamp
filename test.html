@@ -101,7 +101,7 @@
                     var book4 = {name: 'Dracula'};
                     var book5 = {name: 'Dracula 2'};
 
-                    var result = bookStore.add(book1, [book2, book3, [book4]], book5);
+                    var result = bookStore.add(book1, [book2, [book4], book3], book5);
 
                     expect(Array.isArray(result)).toBe(true);
                     expect(result.length).toBe(5);
@@ -226,6 +226,18 @@
                     expect(result.length).toBe(1);
                     expect(result[0].name).toBe('Pride and Prejudice');
                 });
+
+                it("should return empty array if search result is empty", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.find(3);
+
+                    expect(Array.isArray(result)).toBe(true);
+                    expect(result.length).toBe(0);
+                });
             });
 
             describe("All /", function () {
@@ -271,6 +283,59 @@
                     expect(typeof result).toBe('object');
                     expect(result.id).toBe(1);
                     expect(result.name).toBe('Pride and Prejudice');
+                });
+            });
+
+            describe("Update /", function () {
+                it("should update book name by id", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.update(1, 'New title');
+
+                    var book = bookStore.getBook(book1.id);
+                    expect(book.name).toBe('New title');
+                    expect(result).toBe('');
+                    expect(bookStore.all().length).toBe(2);
+                });
+
+                it("should allow save the same title", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    bookStore.add(book1);
+
+                    var result = bookStore.update(1, 'Pride and Prejudice');
+
+                    expect(result).toBe('');
+                    expect(bookStore.all().length).toBe(1);
+                });
+
+                it("should not update book if title is empty", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.update(1, '');
+
+                    expect(result).toBe('Book name can not be empty.');
+                    var book = bookStore.getBook(book1.id);
+                    expect(book.name).toBe('Pride and Prejudice');
+                });
+
+                it("should not update book if title is not unique", function () {
+                    var bookStore = new BookStore();
+                    var book1 = {name: 'Pride and Prejudice'};
+                    var book2 = {name: 'A Tale of Two Cities'};
+                    bookStore.add(book1, book2);
+
+                    var result = bookStore.update(1, 'A Tale of Two Cities');
+
+                    expect(result).toBe('Book name should be unique.');
+                    var book = bookStore.getBook(book1.id);
+                    expect(book.name).toBe('Pride and Prejudice');
                 });
             });
         });

@@ -18,7 +18,13 @@
 <ul id="book_list"></ul>
 
 <script type="text/template" id="book_template">
-    <button class="remove">&times;</button> <span>{{name}}</span>
+    <span class="name">{{name}}</span>
+    <div class="actions">
+        <button class="edit">Edit</button>
+        <button class="remove danger">Delete</button>
+        <button class="save hide">Save</button>
+        <button class="cancel danger hide">Cancel</button>
+    </div>
 </script>
 </body>
 </html>

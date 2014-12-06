@@ -10,6 +10,10 @@
     color: #5D6D81;
 }
 
+.hide {
+    display: none;
+}
+
 a {
     color: #1394BF;
     text-decoration: none;
@@ -17,10 +21,11 @@ a {
 
 form {
     display: inline-block;
+    margin-left: 40px;
 }
 
 input {
-    width: 170px;
+    width: 210px;
     padding: 0.33em;
     border: 1px solid #E9EBED;
     -webkit-font-smoothing: antialiased;
@@ -28,10 +33,12 @@ input {
 
 input:focus {
     outline: none;
+    border: 1px solid #26A8FC;
 }
 
 button {
     padding: 0.2em 0.66em;
+    text-transform: uppercase;
     background: white;
     box-shadow: 0 1px 1px #eee;
     border-radius: 5px;
@@ -46,6 +53,17 @@ button:active {
     border-bottom-color: #1971FB;
     color: white;
     background: linear-gradient(to bottom, #2CB6F5 0%, #1789FC 100%);
+}
+
+button.danger {
+    background-color: #fff0f0;
+}
+
+button.danger:active {
+    border: 1px solid #E74523;
+    border-top-color: #E95131;
+    border-bottom-color: #E74422;
+    background: linear-gradient(to bottom, #ED583C 0%, #ED583C 100%);
 }
 
 ::-webkit-input-placeholder {
@@ -73,6 +91,39 @@ button:active {
     list-style: none;
 }
 
+#book_list .book {
+    position: relative;
+    padding: 5px 0;
+    line-height: 21px;
+    min-height: 21px;
+}
+
 #book_list .book + .book {
-    margin-top: 0.33em;
+    border-top: 1px solid #E9EBED;
+}
+
+#book_list .book .actions {
+    position: absolute;
+    top: 0.1em;
+    left : 100%;
+    width: 200px;
+}
+
+#book_list .notice {
+    color: red;
+}
+
+#book_list .notice:before {
+    content: "!";
+    display: block;
+    margin-right: 0.33em;
+    border-radius: 100%;
+    margin-top: 3px;
+    background: red;
+    float: left;
+    width: 14px;
+    height: 14px;
+    line-height: 14px;
+    text-align: center;
+    color: white;
 }
