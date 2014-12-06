@@ -10,7 +10,6 @@ require(['BookStore', 'AppController'], function (BookStore, AppController) {
     form.addEventListener('submit', function (e) {
         var input = form.querySelector('input');
         var title = input.value.trim();
-        input.value = '';
 
         var result = bookStore.add({
             name: title
@@ -19,8 +18,10 @@ require(['BookStore', 'AppController'], function (BookStore, AppController) {
         e.preventDefault();
 
         if (result !== 0) {
+            input.value = '';
             console.log(title, 'added');
         }
+
     });
 
     new AppController(document.getElementById('book_list'), bookStore);
