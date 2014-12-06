@@ -96,6 +96,7 @@ button.danger:active {
     padding: 5px 0;
     line-height: 21px;
     min-height: 21px;
+    word-break: break-all;
 }
 
 #book_list .book + .book {
