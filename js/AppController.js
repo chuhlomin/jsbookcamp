@@ -1,25 +1,24 @@
 define([], function () {
     function AppController(rootElement, bookStore) {
         this._rootElement = rootElement;
-        this._bookStore = bookStore;
 
         var self = this;
 
-        function addNotice(li, notice) {
-            if (li.getElementsByClassName('notice').length > 0) {
-                noticeNode = li.getElementsByClassName('notice')[0];
+        function addNotice(notice) {
+            if (this.getElementsByClassName('notice').length > 0) {
+                noticeNode = this.getElementsByClassName('notice')[0];
                 noticeNode.innerHTML = notice;
                 return;
             }
             noticeNode = document.createElement('span');
             noticeNode.classList.add('notice');
             noticeNode.innerHTML = notice;
-            li.appendChild(noticeNode);
+            this.appendChild(noticeNode);
         }
 
-        function deleteNotice(li) {
-            if (li.getElementsByClassName('notice').length > 0) {
-                li.getElementsByClassName('notice')[0].remove();
+        function deleteNotice() {
+            if (this.getElementsByClassName('notice').length > 0) {
+                this.getElementsByClassName('notice')[0].remove();
             }
         }
 
@@ -49,7 +48,7 @@ define([], function () {
 
             input.addEventListener('keydown', function(e) {
                 if (e.keyCode === 13) {
-                    eventSave(this.parentNode);
+                    eventSave.call(this.parentNode);
                 }
             }, false);
 
@@ -58,18 +57,18 @@ define([], function () {
             input.focus();
         }
 
-        function eventSave(li) {
-            var bookId = parseInt(li.getAttribute('data-id')); // very bad
-            var input = li.getElementsByTagName('input')[0];
+        function eventSave() {
+            var bookId = parseInt(this.getAttribute('data-id')); // very bad
+            var input = this.getElementsByTagName('input')[0];
             var newName = input.value;
 
             var result = bookStore.update(bookId, newName);
 
             if (result === '') {
-                deleteNotice(li);
-                disableEditMode.call(li);
+                deleteNotice.call(this);
+                disableEditMode.call(this);
             } else {
-                addNotice(li, result);
+                addNotice.call(this, result);
                 input.focus();
             }
         }
@@ -97,18 +96,17 @@ define([], function () {
             });
 
             el.querySelector('.save').addEventListener('click', function() {
-                eventSave(this.parentNode.parentNode);
+                eventSave.call(this.parentNode.parentNode);
 
             });
 
             el.querySelector('.edit').addEventListener('click', function () {
-                var li = this.parentNode.parentNode;
-                enableEditMode.call(li);
+                enableEditMode.call(this.parentNode.parentNode);
             });
 
             el.querySelector('.cancel').addEventListener('click', function () {
                 var li = this.parentNode.parentNode;
-                deleteNotice(li);
+                deleteNotice.call(li);
                 disableEditMode.call(li);
             });
         });
